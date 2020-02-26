@@ -8,14 +8,12 @@ from datetime import datetime, timedelta
 import timesArticle
 import timesComment
 import getDataFromNYTimesAPI
+import config
 
 # Read articles for day
 # Plot # of comments
 # Calculate percentiles over training period
 # Display number of votes in each percentiles
-
-global_start_date = "2020-01-12"
-global_end_date = "2020-02-10"
 
 
 def top_n_comments_by_recommendations(start_date, end_date):
@@ -33,8 +31,8 @@ def top_n_comments_by_recommendations(start_date, end_date):
         curr_day = datetime.strftime(curr_dt, '%Y-%m-%d')
         print(f"Curr day is: {curr_day}")
 
-        filename_for_articles = f"data/trainingArticles-{start_date}.json"
-        filename_for_comments = f"data/trainingComments-{start_date}.json"
+        filename_for_articles = f"${config.global_data_read_dir}/trainingArticles-{start_date}.json"
+        filename_for_comments = f"{config.global_data_read_dir}/trainingComments-{start_date}.json"
         print(f"Filename for articles: {filename_for_articles} filename_for_comments: {filename_for_comments}")
         curr_dt = curr_dt + timedelta(days=1)
 
@@ -71,8 +69,8 @@ def compute_total_comments_by_article(start_date, end_date):
         curr_day = datetime.strftime(curr_dt, '%Y-%m-%d')
         print(f"Curr day is: {curr_day}")
 
-        filename_for_articles = f"data/trainingArticles-{curr_day}.json"
-        filename_for_comments = f"data/trainingComments-{curr_day}.json"
+        filename_for_articles = f"{config.global_data_read_dir}/trainingArticles-{curr_day}.json"
+        filename_for_comments = f"{config.global_data_read_dir}/trainingComments-{curr_day}.json"
         print(f"Filename for articles: {filename_for_articles} filename_for_comments: {filename_for_comments}")
         curr_dt = curr_dt + timedelta(days=1)
 
@@ -110,6 +108,7 @@ def code_data_by_quantile(start_date, end_date):
     q2 = 405.0
     q3 = 725.0
 
+    save_files = False
     curr_dt = datetime.strptime(start_date, '%Y-%m-%d')
     end_dt = datetime.strptime(end_date, '%Y-%m-%d')
     arts_to_save = []
@@ -141,17 +140,21 @@ def code_data_by_quantile(start_date, end_date):
                 a.popularity_quantile = 2
             else:
                 a.popularity_quantile = 1
+            print(f"{a.web_url} Total comments: {a.num_comments} popularity: {a.popularity_quantile}")
+
             print(a)
             arts_to_save.append(a)
 
-    print(f"Saving: {len(arts_to_save)} articles")
-    getDataFromNYTimesAPI.save_articles(arts_to_save, "data2", global_start_date, global_end_date)
+    if save_files:
+        print(f"Saving: {len(arts_to_save)} articles")
+        getDataFromNYTimesAPI.save_articles(arts_to_save, "data2", config.global_start_date, config.global_end_date)
 
 
 # compute_comment_score("2020-01-12", "2020-01-12")
 # recs = compute_recommendations_by_article("2020-01-12", "2020-01-12")
 # print(recs)
 
-# code_data_by_quantile(global_start_date, global_end_date)
+# code_data_by_quantile(config.global_start_date, config.global_end_date)
 
-code_data_by_quantile(global_start_date, global_end_date)
+
+

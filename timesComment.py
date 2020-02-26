@@ -5,6 +5,9 @@ import textwrap
 from bs4 import BeautifulSoup as bs
 from urllib.parse import quote_plus
 
+# from timesArticle import TimesArticle
+import timesArticle
+
 
 class TimesComment:
     _comments = []
@@ -19,15 +22,23 @@ class TimesComment:
         self.reply_count = reply_count
         TimesComment._comments.append(self)
 
+        article = timesArticle.TimesArticle._article_map[self.article_url]
+        if article:
+            article.add_comment(self)
+        else:
+            raise Exception(f"No article for comment_id: {self.comment_id}"
+                            f" article_url: {self.article_url}")
+
 
     @classmethod
-    def save_to_json(cls, filename):
+    def save_to_json(cls, filename, comments):
         """
         Save all articles to a file as JSON
+        :param comments:
         :param filename:
         :return:
         """
-        results = [a.__dict__ for a in TimesComment._comments]
+        results = [a.__dict__ for a in comments]
         with open(filename, 'w') as fp:
             json.dump({"comments": results}, fp, indent=4)
 
@@ -38,6 +49,7 @@ class TimesComment:
         :param filename:
         :return:
         """
+        comments = []
         with open(filename, "r") as read_file:
             data = json.load(read_file)
         print("Got here")
@@ -45,3 +57,13 @@ class TimesComment:
             # headline, pub_date, news_desk, keywords):
             new_comment = TimesComment(c['article_url'], c['comment_id'], c['user_id'], c['comment_title'],
                                                  c['comment_body'], c['recommendations'], c['reply_count'])
+            comments.append(new_comment)
+        return comments
+
+    def __repr__(self):
+        s = f"Comment: {self.article_url}, {self.comment_body[0:30]}," \
+            f"Recommendations: {self.recommendations}, Replies:{self.reply_count}  {self.comment_id}, {self.user_id}\n"
+        return s
+
+    def __str__(self):
+        return self.__repr__()

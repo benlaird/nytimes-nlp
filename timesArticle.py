@@ -6,12 +6,16 @@ from bs4 import BeautifulSoup as bs
 from urllib.parse import quote_plus
 
 import config
+import timesComment
+from timesComment import TimesComment
 
 api_key = config.api_key
 
 
 class TimesArticle:
     _articles = []
+    # Key TimeArticle, value list of comments
+    _article_map = {}
 
     def __init__(self, article_id, web_url, lead_paragraph, headline, pub_date, news_desk, keywords):
         """
@@ -30,7 +34,6 @@ class TimesArticle:
         self.lead_paragraph = lead_paragraph
         self.headline = headline
 
-        self.num_comments = 0
         self.pub_date = pub_date
         self.news_desk = news_desk
         # keywords is a list of dictionaries, each of the form:
@@ -40,9 +43,15 @@ class TimesArticle:
         # TODO add byline later
         # Full text is added later by set_article_text
         self.full_text = ""
+        self.num_comments = 0
+        self.comments = []
+        # The popularity quantile (in terms of number of comments) from 1 to 4.. 1 is the topmost
+        self.popularity_quantile = 0
 
         # Add to class list
         TimesArticle._articles.append(self)
+        # Associated list of comments
+        TimesArticle._article_map[self.web_url] = self
 
     def search_by_id(self):
         """
@@ -74,6 +83,10 @@ class TimesArticle:
         self.full_text = textwrap.fill(self.full_text, width=80, drop_whitespace=False)
         return self.full_text
 
+    def add_comment(self, tc : TimesComment):
+        self.comments.append(tc)
+        self.num_comments += 1
+
     @classmethod
     def article_in_list(cls, web_url):
         """
@@ -87,31 +100,49 @@ class TimesArticle:
         return None
 
     @classmethod
-    def save_to_json(cls, filename):
+    def save_to_json(cls, filename, arts):
         """
         Save all articles to a file as JSON
         :param filename:
         :return:
         """
-        results = [a.__dict__ for a in TimesArticle._articles]
+        results = [a.__dict__ for a in arts]
+        # Remove comments object from dict
+        for li in results:
+            del li['comments']
         with open(filename, 'w') as fp:
             json.dump({"articles": results}, fp, indent=4)
 
     @classmethod
     def read_from_json(cls, filename):
         """
-
         :param filename:
         :return:
         """
+        articles = []
         with open(filename, "r") as read_file:
             data = json.load(read_file)
-        print("Got here")
+
         for a in data['articles']:
             # headline, pub_date, news_desk, keywords):
             new_art = TimesArticle(a['article_id'], a['web_url'], a['lead_paragraph'], a['headline'], a['pub_date'],
-                                  a['news_desk'], a['keywords'])
-            new_art.num_comments = a['num_comments']
+                                   a['news_desk'], a['keywords'])
+            # Don't set number of comments, it's set later by reading the comments themselves
+            new_art.num_comments = 0
             new_art.full_text = a['full_text']
+            if "popularity_quantile" in a:
+                new_art.popularity_quantile = a['popularity_quantile']
+            articles.append(new_art)
+        return articles
 
+    def __repr__(self):
+        # print(indent(text, 4))
+        s = (f"Article:  {self.web_url}, "
+             f"{self.pub_date}, {self.news_desk}, {self.keywords}\n"
+             f"num_comments: {self.num_comments} popularity: {self.popularity_quantile}\n"
+             f"\t{self.headline}")
 
+        return s
+
+    def __str__(self):
+        return self.__repr__()
