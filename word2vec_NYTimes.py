@@ -1,3 +1,5 @@
+from enum import Enum
+
 from tabulate import tabulate
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -12,18 +14,18 @@ from sklearn.naive_bayes import BernoulliNB, MultinomialNB
 from sklearn.pipeline import Pipeline
 from sklearn.svm import SVC
 from sklearn.metrics import accuracy_score, f1_score
-from sklearn.model_selection import cross_val_score
-from sklearn.model_selection import StratifiedShuffleSplit
-import struct
+from sklearn.model_selection import cross_val_score, train_test_split
+
+import numpy as np
+import tensorflow as tf
+import tensorboard as tb
+
+tf.io.gfile = tb.compat.tensorflow_stub.io.gfile
+from torch.utils.tensorboard import SummaryWriter
 
 import getDataFromNYTimesAPI
-import visualizeLDA
 
-import spacy
-from spacy.matcher import PhraseMatcher
-from spacy.tokens import Span
-
-nlp = spacy.load("en_core_web_sm")
+QUANTILE_CUT = 6
 
 
 class MeanEmbeddingVectorizer(object):
@@ -72,43 +74,37 @@ class TfidfEmbeddingVectorizer(object):
 
     def transform(self, X):
         return np.array([
-                np.mean([self.word2vec[w] * self.word2weight[w]
-                         for w in words if w in self.word2vec] or
-                        [np.zeros(self.dim)], axis=0)
-                for words in X
-            ])
-
-"""
- np.mean([self.word2vec.wv[w] for w in words if w in self.word2vec.wv]
-                    or [np.zeros(self.dim)], axis=0)
-            for words in X"""
+            np.mean([self.word2vec[w] * self.word2weight[w]
+                     for w in words if w in self.word2vec] or
+                    [np.zeros(self.dim)], axis=0)
+            for words in X
+        ])
 
 
-arts = getDataFromNYTimesAPI.read_data()
-# getDataFromNYTimesAPI.clean_data(arts)
-quantile_cut = 6
-dependent_var = [1 if (a.popularity_quantile <= quantile_cut) else 0 for a in arts]
-docs = visualizeLDA.all_article_text(arts)
-# docs = [a.lead_paragraph for a in arts]  #Top model is mult_nb F1 == 0.2838
+def save_tensor_vectors_old(vectors, metadata):
+    writer = SummaryWriter("tensor_vectors")
+    writer.add_embedding(vectors, metadata)
+    writer.close()
 
-nlp.vocab["Mr."].is_stop = True
-nlp.vocab["Ms."].is_stop = True
-nlp.vocab["Mrs."].is_stop = True
 
-tokenized_docs = []
-for d in docs:
-    doc = nlp(d)
-    tokens = []
-    for token in doc:
-        if not (token.is_punct | token.is_space | token.is_stop):
-            # print("{:<12}{:<10}{:<10}".format(token.text, token.pos, token.dep))
-            tokens.append(token.text)
-    tokenized_docs.append(tokens)
+def save_tensor_vectors(vectors, idx, arts):
+    md = []
 
-X = tokenized_docs
-y = dependent_var
+    df = pd.DataFrame(vectors)
+    for i in idx:
+        pop_quartile = ((arts[i].popularity_quantile - 1) // 5) + 1
+        md.append(
+            [f"{pop_quartile}: {arts[i].headline['main']}", i, pop_quartile, arts[i].lead_paragraph])
+    print(md)
 
-X, y = np.array(X), np.array(y)
+    meta_df = pd.DataFrame(md, columns=['label', 'index', 'popularity', 'lead para'])
+
+    df.to_csv("tensor_vectors/tensors.tsv", header=False, index=False, sep="\t")
+    meta_df.to_csv("tensor_vectors/metadata.tsv", sep="\t", index=False)
+
+
+X, y, arts = getDataFromNYTimesAPI.read_and_tokenize(QUANTILE_CUT)
+
 print("total examples %s" % len(y))
 
 GLOVE_6B_50D_PATH = "glove.6B/glove.6B.50d.txt"
@@ -178,15 +174,14 @@ all_models = [
     ("mult_nb", mult_nb),
     ("w2v", etree_w2v),
     ("w2v_tfidf", etree_w2v_tfidf),
-("mult_nb_tfidf", mult_nb_tfidf),
-("bern_nb", bern_nb),
-("bern_nb_tfidf", bern_nb_tfidf),
-("svc", svc),
-("svc_tfidf", svc_tfidf),
-("glove_small", etree_glove_small),
-("glove_big", etree_glove_big),
-("glove_big_tfidf", etree_glove_big_tfidf),]
-
+    ("mult_nb_tfidf", mult_nb_tfidf),
+    ("bern_nb", bern_nb),
+    ("bern_nb_tfidf", bern_nb_tfidf),
+    ("svc", svc),
+    ("svc_tfidf", svc_tfidf),
+    ("glove_small", etree_glove_small),
+    ("glove_big", etree_glove_big),
+    ("glove_big_tfidf", etree_glove_big_tfidf), ]
 
 from sklearn.metrics import classification_report, accuracy_score, make_scorer
 
@@ -196,9 +191,11 @@ def classification_report_with_f1_score(y_true, y_pred):
     return f1_score(y_true, y_pred, average="micro")
 
 
-run_all_models = False
-print(f"Popularity quantile defined as in the top {quantile_cut / 20 * 100}%")
-if run_all_models:
+ActionEnum = Enum('Action', ['run_all_models', 'glove_small_tfidf_cv', 'glove_small_tfidf_vectors'])
+action = ActionEnum.glove_small_tfidf_vectors
+
+print(f"Popularity quantile defined as in the top {QUANTILE_CUT / 20 * 100}%")
+if action == ActionEnum.run_all_models:
     unsorted_scores = []
 
     for name, model in all_models:
@@ -208,12 +205,36 @@ if run_all_models:
         unsorted_scores.append((name, score))
     scores = sorted(unsorted_scores, key=lambda x: -x[1])
     print(tabulate(scores, floatfmt=".4f", headers=("model", 'score')))
-else:
+elif action == ActionEnum.glove_small_tfidf_cv:
     name = "glove_small_tfidf"
     model = etree_glove_small_tfidf
     # F1 score
     score = cross_val_score(model, X, y, cv=5, scoring=make_scorer(classification_report_with_f1_score))
     print(f"Ran model: {name}... mean f1 score: {score.mean()}")
+elif action == ActionEnum.glove_small_tfidf_vectors:
+    indices = range(0, len(X))
+    X_train, X_test, y_train, y_test, idx_train, idx_test = train_test_split(X, y, indices, random_state=42,
+                                                                             test_size=0.2)
+
+    vectorizer = TfidfEmbeddingVectorizer(glove_small)
+
+    vectorizer.fit(X_train, y_train)
+    dtm_tfidf_train = vectorizer.transform(X_train)
+
+    dtm_tfidf_test = vectorizer.transform(X_test)
+
+    # gnb = MultinomialNB()
+    clf = ExtraTreesClassifier(n_estimators=200)
+    clf.fit(dtm_tfidf_train, y_train)
+
+    nb_train_preds = clf.predict(dtm_tfidf_train)
+    y_pred = clf.predict(dtm_tfidf_test)
+
+    print('Testing accuracy %s' % accuracy_score(y_test, y_pred))
+    print('Testing F1 score: {}'.format(f1_score(y_test, y_pred, average='micro')))
+    print(classification_report(y_test, y_pred))
+
+    save_tensor_vectors(dtm_tfidf_train, idx_train, arts)
 
 exit(0)
 # unsorted_scores = [(name, cross_val_score(model, X, y, cv=5).mean()) for name, model in all_models]
