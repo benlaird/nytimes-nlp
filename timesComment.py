@@ -1,4 +1,5 @@
 import json
+import re
 import time
 import requests
 import textwrap
@@ -20,6 +21,15 @@ class TimesComment:
         self.comment_body = comment_body
         self.recommendations = recommendations
         self.reply_count = reply_count
+
+        # Store the first sentence
+        find = re.compile(r"^(([^\.]*\.){2})")
+        search_res = re.search(find, self.comment_body)
+        if search_res:
+            self.first_sentence = search_res.group(1)
+        else:
+            self.first_sentence = ""
+
         TimesComment._comments.append(self)
 
         article = timesArticle.TimesArticle._article_map[self.article_url]
@@ -61,8 +71,9 @@ class TimesComment:
         return comments
 
     def __repr__(self):
-        s = f"Comment: {self.article_url}, {self.comment_body[0:30]}," \
-            f"Recommendations: {self.recommendations}, Replies:{self.reply_count}  {self.comment_id}, {self.user_id}\n"
+        # s = f"Comment: {self.article_url}, {self.comment_body[0:30]}," \
+        s = f"Comment: {self.article_url}, {self.first_sentence}," \
+                    f"Recommendations: {self.recommendations}, Replies:{self.reply_count}  {self.comment_id}, {self.user_id}\n"
         return s
 
     def __str__(self):
