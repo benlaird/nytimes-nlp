@@ -1,0 +1,139 @@
+{
+    "articles": [
+        {
+            "article_id": "nyt://article/6eb1a4e7-a85e-50c4-a797-695b33b8eec6",
+            "web_url": "https://www.nytimes.com/2020/01/26/opinion/greenwald-brazil-reporter.html",
+            "lead_paragraph": "When Julian Assange, the WikiLeaks founder, was charged last year by the Trump administration in connection with the publication of secret United States government documents nearly a decade earlier, many journalists expressed deep concern about the dangerous precedent the case could set for investigative reporting in America.",
+            "headline": {
+                "main": "Reporters Face New Threats From the Governments They Cover",
+                "kicker": null,
+                "content_kicker": null,
+                "print_headline": "The New Threat to Journalists",
+                "name": null,
+                "seo": null,
+                "sub": null
+            },
+            "pub_date": "2020-01-26T16:00:07+0000",
+            "news_desk": "OpEd",
+            "keywords": [
+                {
+                    "name": "subject",
+                    "value": "News and News Media",
+                    "rank": 1,
+                    "major": "N"
+                },
+                {
+                    "name": "subject",
+                    "value": "Classified Information and State Secrets",
+                    "rank": 2,
+                    "major": "N"
+                },
+                {
+                    "name": "subject",
+                    "value": "Freedom of the Press",
+                    "rank": 3,
+                    "major": "N"
+                },
+                {
+                    "name": "subject",
+                    "value": "News Sources, Confidential Status of",
+                    "rank": 4,
+                    "major": "N"
+                },
+                {
+                    "name": "subject",
+                    "value": "Computers and the Internet",
+                    "rank": 5,
+                    "major": "N"
+                },
+                {
+                    "name": "organizations",
+                    "value": "Committee to Protect Journalists",
+                    "rank": 6,
+                    "major": "N"
+                },
+                {
+                    "name": "organizations",
+                    "value": "Intercept, The (Magazine)",
+                    "rank": 7,
+                    "major": "N"
+                },
+                {
+                    "name": "organizations",
+                    "value": "Justice Department",
+                    "rank": 8,
+                    "major": "N"
+                },
+                {
+                    "name": "organizations",
+                    "value": "National Security Agency",
+                    "rank": 9,
+                    "major": "N"
+                },
+                {
+                    "name": "persons",
+                    "value": "Assange, Julian P",
+                    "rank": 10,
+                    "major": "N"
+                },
+                {
+                    "name": "persons",
+                    "value": "Bolsonaro, Jair (1955- )",
+                    "rank": 11,
+                    "major": "N"
+                },
+                {
+                    "name": "persons",
+                    "value": "Da Silva, Luiz Inacio Lula",
+                    "rank": 12,
+                    "major": "N"
+                },
+                {
+                    "name": "persons",
+                    "value": "Greenwald, Glenn",
+                    "rank": 13,
+                    "major": "N"
+                },
+                {
+                    "name": "persons",
+                    "value": "Manning, Chelsea",
+                    "rank": 14,
+                    "major": "N"
+                },
+                {
+                    "name": "persons",
+                    "value": "Snowden, Edward J",
+                    "rank": 15,
+                    "major": "N"
+                },
+                {
+                    "name": "persons",
+                    "value": "Trump, Donald J",
+                    "rank": 16,
+                    "major": "N"
+                },
+                {
+                    "name": "glocations",
+                    "value": "Brazil",
+                    "rank": 17,
+                    "major": "N"
+                },
+                {
+                    "name": "glocations",
+                    "value": "United States",
+                    "rank": 18,
+                    "major": "N"
+                },
+                {
+                    "name": "subject",
+                    "value": "Corruption (Institutional)",
+                    "rank": 19,
+                    "major": "N"
+                }
+            ],
+            "full_text": " Reporters Face New Threats From the Governments They \nCover The cases against Julian Assange and Glenn Greenwald may be models for a \ncrackdown. By James Risen Mr. Risen, a former reporter for The Times, is the \nsenior national security correspondent for The Intercept. When Julian Assange, \nthe WikiLeaks founder, was charged last year by the Trump administration in \nconnection with the publication of secret United States government documents \nnearly a decade earlier, many journalists expressed deep concern about the \ndangerous precedent the case could set for investigative reporting in America. \nBut few seemed to consider that the case might also serve as a model for other \nnations eager to clamp down on press freedom. On Tuesday, Glenn Greenwald, an \nAmerican journalist living and working in Brazil, was charged, in a criminal \ncomplaint brought by Brazilian prosecutors, with cybercrimes in connection with \nhis stories on private messages among Brazilian officials that revealed \ncorruption and abuses at the highest levels of the government. Brazilian \nprosecutors asserted that Mr. Greenwald was part of a criminal organization that\n hacked the cellphones of government officials. He has denied the charges. (Full\n disclosure: Mr. Greenwald is a co-founder of The Intercept, where I work as a \nreporter; I also run the First Look Press Freedom Defense Fund, part of the \nnonprofit organization that includes The Intercept.) The case against Mr. \nGreenwald is eerily similar to the Trump administration\u2019s case against Mr. \nAssange. Last April, the Justice Department charged Mr. Assange with aiding a \nsource, the former Army intelligence analyst Chelsea Manning, to gain access to \na United States military computer database. In May 2019, the charges against him\n were broadened, and he was indicted under the Espionage Act in connection with \nthe publication of American military and diplomatic documents by WikiLeaks. Both\n cases are based in part on a new prosecutorial concept \u2014 that journalism can be\n proved to be a crime through a focus on interactions between reporters and \ntheir sources. Prosecutors are now scrutinizing the processes by which sources \nobtain classified or private information and then provide it to journalists. \nSince those interactions today are largely electronic, prosecutors are seeking \nto criminalize journalism by turning to anti-hacking laws to implicate reporters\n in the purported criminal activity of their sources in gaining access to data \non computers or cellphones without authorization.  This blunt approach gives the\n government enormous leverage over journalists and, in the United States, \nprovides them with a detour around First Amendment concerns. If these cases \nbecome templates that prosecutors in the United States and other nations follow,\n virtually every investigative reporter will become vulnerable to criminal \ncharges and imprisonment. Both the Trump administration and the right-wing \nBrazilian government of President Jair Bolsonaro seem to have decided to \nexperiment with such draconian anti-press tactics by trying them out first on \naggressive and disagreeable figures. In fact, by the time of his indictment last\n year, there was still an ongoing debate within the media about whether Mr. \nAssange should even be considered a journalist at all. In 2010, when WikiLeaks \nbegan publishing the huge leaks of United States government documents it had \nobtained from Ms. Manning, Mr. Assange suddenly emerged as a strange new player \nin the modern journalistic landscape. Under his leadership, WikiLeaks both \npublished the documents itself and also shared many of the leaked documents with\n other major news organizations, including The New York Times. Mr. Assange was \nboth a publisher and an intermediary between sources and reporters, which made \nit difficult to define his journalistic role. His later involvement in the \nTrump-Russia case \u2014 in 2016, WikiLeaks obtained and released emails and other \ndocuments from the Clinton presidential campaign and the Democratic National \nCommittee from a hacker believed to be a front for Russian intelligence \u2014 \ntransformed Mr. Assange into an even more incendiary character with little \npublic support. (The federal charges against Mr. Assange are not related to his \ninvolvement in the 2016 campaign.) Mr. Greenwald revels in his divisiveness and \nhis disdain for the mainstream media, and he and I have publicly clashed over \nour differing views of the Trump-Russia case. But he is also a zealous \njournalist who came to prominence in 2013 for his Pulitzer Prize-winning \ncoverage of a giant trove of documents from the National Security Agency that \nwere leaked by the former N.S.A. contractor Edward Snowden. Last year, Mr. \nGreenwald obtained another big leak, the private messages of Brazilian \ngovernment officials concerning a major corruption case in Brazil that had led \nto the conviction of the former Brazilian president Luiz In\u00e1cio Lula da Silva. \nMr. Greenwald\u2019s reporting revealed that the investigation that led to Mr. da \nSilva\u2019s conviction was deeply politicized and corrupt. The stories were \nexplosive in Brazil, and ultimately helped lead to Mr. da Silva\u2019s release from \nprison in November. But Mr. Greenwald\u2019s reporting enraged President Bolsonaro, \nwho had been leveling threats against the journalist for months before the \ncomplaint issued on Tuesday. In an interview with me on Thursday, Mr. Greenwald \nagreed that there are parallels between his case and Mr. Assange\u2019s, and added \nthat he doesn\u2019t believe that Mr. Bolsonaro would have taken action against an \nAmerican journalist if he had thought President Trump would oppose it. \n\u201cBolsonaro worships Trump, and the Bolsonaro government is taking the signal \nfrom Trump that this kind of behavior is acceptable,\u201d he said. The State \nDepartment has not issued any statement of concern about Brazil\u2019s case against \nMr. Greenwald, which in past administrations would have been common practice. \n\u201cThis is all about targeting reporters who are publishing information that is \nembarrassing, and not like the 90 percent of the leaks coming out of Washington \nthat are official leaks designed to support the people in power,\u201d said Joshua \nDratel, a criminal defense attorney in New York who has represented prominent \nwhistle blowers and who also represented WikiLeaks in a civil suit brought \nagainst it by the Democratic National Committee. In fact, Mr. Trump\u2019s anti-press\n rhetoric and actions have encouraged authoritarian regimes around the world to \nprosecute and jail journalists, and to impose new anti-press laws and other \nmeasures designed to curtail negative coverage. Joel Simon, the executive \ndirector of the Committee to Protect Journalists, said in an interview that one \nof the latest tactics spreading around the globe is the creation of vaguely \nworded \u201cfake news\u201d laws that criminalize news that government officials deem to \nbe wrong. \u201cFake news\u201d is, of course, a phrase that Mr. Trump has helped \npopularize. \u201cQatar just promulgated a fake news law this week,\u201d Mr. Simon said, \nnoting that Singapore also has one. \u201cThese fake news laws are absolutely \ncorrelated with the Trump administration.\u201d The most tragic evidence that Mr. \nTrump is enabling a global crackdown on the press has been his failure to hold \nSaudi Arabia\u2019s leader, Crown Prince Mohammed bin Salman, accountable for the \nbrutal 2018 murder of the Washington Post journalist Jamal Khashoggi. \u201cThe Trump\n administration is an accessory after the fact to the Khashoggi murder,\u201d Mr. \nSimon said. While the Bush and Obama administrations were \u201cinconsistent\u201d on \npress issues, \u201cthey were still willing to discuss concerns about press freedom \nwith another country in the framework of the bilateral relationship,\u201d he added. \n\u201cThat\u2019s gone now with Trump.\u201d It will be tragic if journalists shrug off the \nattack on the contrarian Mr. Greenwald and don\u2019t see his case for what it truly \nsignifies \u2014 that Trump-like attacks on the press are spreading like a virus \naround the globe. James Risen is the senior national security correspondent for \nThe Intercept. As a reporter for The New York Times, he and another former Times\n reporter, Eric Lichtblau, received the 2006 Pulitzer Prize for national \nreporting on secret domestic eavesdropping by the federal government. ",
+            "num_comments": 139,
+            "popularity_quantile": 17
+        }
+    ]
+}
