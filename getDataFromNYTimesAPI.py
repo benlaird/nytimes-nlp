@@ -5,8 +5,11 @@ import json
 from collections import namedtuple
 
 from datetime import datetime, timedelta
-
+import re
 from urllib.parse import quote_plus
+import numpy as np
+import spacy
+nlp = spacy.load("en_core_web_sm")
 
 import timesArticle
 import timesComment
@@ -298,6 +301,68 @@ def read_articles(start_date, end_date=None):
 
     return timesArticle.TimesArticle._articles
 
+
+def read_data():
+    arts = read_articles("2020-01-12", "2020-02-10")
+    return arts
+
+
+def clean_data(arts):
+    global_num_replaces = 0
+    num_replaces = 0
+    clean_res = []
+    p = re.compile("^[\s]*Advertisement[\s]*Supported[\s]*by")
+    # re.DOTALL means match newlines
+    p2 = re.compile("If[\s]*you’re[\s]*interested[\s]*in[\s]*talking.*", re.DOTALL)
+    p3 = re.compile("The[\s]*Times[\s]*is[\s]*committed.*", re.DOTALL)
+    clean_res = [p, p2, p3]
+    for a in arts:
+        num_replaces = 0
+        for clean_re in clean_res:
+            new_ft = clean_re.sub("", a.full_text)
+            if new_ft != a.full_text:
+                a.full_text = new_ft
+                num_replaces += 1
+                global_num_replaces += 1
+        print(f"article_id {a.article_id} num_replaces: {num_replaces}")
+
+    print(f"Clean up, global num replacements: {global_num_replaces}")
+
+
+def all_article_text(arts):
+    docs = [a.full_text for a in arts]
+    return docs
+
+
+def read_and_tokenize(quantile_cut):
+    """
+    :param quantile_cut: how many quantiles from top to consider as "popular" i.e. as the "1" category
+    :return:
+    """
+    arts = read_data()
+    # getDataFromNYTimesAPI.clean_data(arts)
+    quantile_cut
+    dependent_var = [1 if (a.popularity_quantile <= quantile_cut) else 0 for a in arts]
+    docs = all_article_text(arts)
+    # docs = [a.lead_paragraph for a in arts]  #Top model is mult_nb F1 == 0.2838
+
+    nlp.vocab["Mr."].is_stop = True
+    nlp.vocab["Ms."].is_stop = True
+    nlp.vocab["Mrs."].is_stop = True
+
+    tokenized_docs = []
+    for d in docs:
+        doc = nlp(d)
+        tokens = []
+        for token in doc:
+            if not (token.is_punct | token.is_space | token.is_stop):
+                # print("{:<12}{:<10}{:<10}".format(token.text, token.pos, token.dep))
+                tokens.append(token.text)
+        tokenized_docs.append(tokens)
+
+    X = tokenized_docs
+    y = dependent_var
+    return X, y, arts
 
 # arts = read_articles(config.global_start_date, config.global_end_date)
 # print(len(arts))
